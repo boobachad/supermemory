@@ -1,5 +1,11 @@
 # Supermemory Changelog
 
+## [Quick Add from Selection] - 2025-11-05
+
+- Select text anywhere and quickly add it as a memory - the content field is automatically filled
+- Select text and search memories instantly - the search field is automatically filled
+- Save time by selecting text before opening commands
+
 ## [Search Projects + Enhancements] - 2025-10-13
 
 - Added command to search and add projects
