@@ -94,13 +94,31 @@ DATABASE_URL=file:./local.db
 
 ### Step 4: Set Up the Database
 
+The project uses SQLite with Drizzle ORM. The database configuration is in `packages/db/drizzle.config.ts`.
+
 Run this exact command from the root of the project:
 
 ```bash
 npm run db:push
 ```
 
-You should see output including "Changes applied" at the end.
+**What this command does:**
+- Creates a SQLite database file at `packages/db/local.db`
+- Creates the required tables (users, sessions, accounts, verifications)
+
+**Expected output:**
+```
+Reading config file 'packages/db/drizzle.config.ts'
+[✓] Pulling schema from database...
+[✓] Changes applied
+```
+
+If you see "Changes applied" at the end, the database is ready.
+
+**If this fails**, check:
+1. The file `apps/server/.env` exists
+2. It contains the line: `DATABASE_URL=file:./local.db`
+3. You are running the command from the root folder (where package.json is)
 
 ### Step 5: Start the Development Servers
 
@@ -163,9 +181,32 @@ If you see "API Status: Checking..." that stays forever, the server is not runni
 ### Problem: "npm run db:push" fails
 
 **Solution:**
-1. Make sure the file `apps/server/.env` exists
-2. Make sure it contains the line: `DATABASE_URL=file:./local.db`
-3. Make sure you are running the command from the root folder (not from apps/server)
+
+1. Make sure the file `apps/server/.env` exists:
+   ```bash
+   ls apps/server/.env
+   ```
+   If it says "No such file", create it:
+   ```bash
+   cp apps/server/.env.example apps/server/.env
+   ```
+
+2. Make sure `apps/server/.env` contains this exact line:
+   ```
+   DATABASE_URL=file:./local.db
+   ```
+
+3. Make sure you are running the command from the root folder:
+   ```bash
+   pwd
+   ```
+   Should show something like `/path/to/supermemory` (not `/path/to/supermemory/apps/server`)
+
+4. If you still get errors, try running drizzle directly:
+   ```bash
+   cd packages/db
+   npx drizzle-kit push
+   ```
 
 ### Problem: Server won't start / "BETTER_AUTH_SECRET" error
 
@@ -238,10 +279,15 @@ supermemory/
 │       ├── .env.example        # Template for server config
 │       └── .env                # Your server config (create this)
 ├── packages/
-│   ├── api/                    # Shared API definitions
-│   ├── auth/                   # Authentication config
-│   ├── config/                 # TypeScript configs
-│   └── db/                     # Database schema
+│   ├── api/                    # Shared API definitions (tRPC routers)
+│   ├── auth/                   # Authentication config (Better Auth)
+│   ├── config/                 # Shared TypeScript configs
+│   └── db/                     # Database (Drizzle ORM + SQLite)
+│       ├── src/
+│       │   ├── index.ts        # Database connection
+│       │   └── schema/         # Table definitions
+│       ├── drizzle.config.ts   # Drizzle configuration
+│       └── local.db            # SQLite database file (created by db:push)
 ├── package.json                # Root dependencies and scripts
 ├── turbo.json                  # Build configuration
 └── README.md                   # This file
@@ -256,6 +302,8 @@ supermemory/
 | `apps/web/src/lib/history/mock-data.ts` | The fake browsing history data (22 entries) |
 | `apps/web/src/lib/history/processing.ts` | Logic to filter entries and create topic categories |
 | `apps/web/src/routes/graph.tsx` | The Memory Graph page with all the UI and demo logic |
+| `packages/db/drizzle.config.ts` | Database configuration (SQLite connection settings) |
+| `packages/db/src/schema/` | Database table definitions (users, sessions, etc.) |
 
 ---
 
