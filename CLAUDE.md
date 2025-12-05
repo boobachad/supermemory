@@ -4,116 +4,110 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Structure
 
-This is a **Turbo monorepo** containing multiple applications and shared packages:
+This is a **Turbo monorepo** for the History Learning MVP - a demonstration of `@supermemory/memory-graph` for visualizing browsing history as a knowledge graph.
 
 ### Applications (`apps/`)
-- **`web/`** - Next.js web application
+- **`web/`** - React frontend with TanStack Router (Vite)
+- **`server/`** - Hono backend with tRPC APIs
+
+### Packages (`packages/`)
+- **`api/`** - Shared tRPC router definitions
+- **`auth/`** - Better Auth configuration
+- **`config/`** - Shared TypeScript configs
+- **`db/`** - Drizzle ORM schema and SQLite database
 
 ## Development Commands
 
 ### Root Level (Monorepo)
-- `bun run dev` - Start all applications in development mode
-- `bun run build` - Build all applications
-- `bun run check-types` - Run TypeScript checks across all apps
-- `bun run format-lint` - Format and lint code using Biome
+- `npm run dev` - Start all applications in development mode
+- `npm run build` - Build all applications
+- `npm run check-types` - Run TypeScript checks across all apps
+- `npm run dev:web` - Start only the web application
+- `npm run dev:server` - Start only the server
 
-### Web Application (`apps/web/`)
-- `bun run dev` - Start Next.js development server
-- `bun run build` - Build Next.js application
-- `bun run lint` - Run Next.js linting
+### Database Commands
+- `npm run db:push` - Push schema changes to database
+- `npm run db:studio` - Open Drizzle Studio (database UI)
+- `npm run db:generate` - Generate migrations
+- `npm run db:migrate` - Run migrations
 
 ## Architecture Overview
 
 ### Core Technology Stack
-- **Runtime**: Next.js (web)
-- **Framework**: Next.js (web)
+- **Runtime**: Node.js 18+
+- **Frontend Framework**: React 19 with TanStack Router
+- **Backend Framework**: Hono with tRPC
 - **Language**: TypeScript throughout
-- **Package Manager**: Bun
-- **Monorepo**: Turbo
+- **Package Manager**: npm
+- **Monorepo**: Turborepo
 - **Authentication**: Better Auth
-- **Monitoring**: Sentry
+- **Database**: SQLite with Drizzle ORM
+- **Graph Visualization**: @supermemory/memory-graph
 
-### API Application (Primary Backend)
-The API serves as the core backend with these key features:
+### Key Features
+The MVP demonstrates:
+1. **History Filtering**: Filter browsing history to extract relevant programming content
+2. **Cross-Referencing**: Create parent topic nodes that group related entries
+3. **Graph Visualization**: Interactive knowledge graph using @supermemory/memory-graph
 
-**Key API Routes**
-- `/v3/documents` - CRUD operations for documents/memories
-- `/v3/search` - Semantic search across indexed content
-- `/v3/connections` - External service integrations (Google Drive, Notion, OneDrive)
-- `/v3/settings` - Organization and user settings
-- `/v3/analytics` - Usage analytics and reporting
-- `/api/auth/*` - Authentication endpoints
-
-### Web Application
-Next.js application providing user interface for:
+### Key Files
+| File | Description |
+|------|-------------|
+| `apps/web/src/lib/history/mock-data.ts` | Mock browsing history entries |
+| `apps/web/src/lib/history/processing.ts` | Filtering and cross-referencing logic |
+| `apps/web/src/routes/graph.tsx` | Main Memory Graph page component |
 
 ## Key Libraries & Dependencies
 
 ### Shared Dependencies
-- `better-auth` - Authentication system with organization support
+- `better-auth` - Authentication system
 - `drizzle-orm` - Database ORM
 - `zod` - Schema validation
-- `hono` - Web framework (API & MCP)
-- `@sentry/*` - Error monitoring
+- `@trpc/server` & `@trpc/client` - Type-safe APIs
 - `turbo` - Monorepo build system
 
 ### Web-Specific
-- `next` - React framework
-- `@radix-ui/*` - UI components
+- `react` & `react-dom` - UI framework
+- `@tanstack/react-router` - File-based routing
 - `@tanstack/react-query` - Data fetching
-- `recharts` - Analytics visualization
+- `@supermemory/memory-graph` - Graph visualization
+- `tailwindcss` - Styling
+
+### Server-Specific
+- `hono` - Web framework
+- `@libsql/client` - SQLite client
+
+## Environment Configuration
+
+### Web App (`apps/web/.env`)
+```env
+VITE_SERVER_URL=http://localhost:3000
+```
+
+### Server (`apps/server/.env`)
+```env
+BETTER_AUTH_SECRET=your-secret-key
+BETTER_AUTH_URL=http://localhost:3000
+CORS_ORIGIN=http://localhost:3001
+DATABASE_URL=file:./local.db
+```
 
 ## Development Workflow
 
-### Content Processing Pipeline
-All content goes through the `IngestContentWorkflow` which handles:
-- Content type detection and extraction
-- AI-powered summarization and automatic tagging
-- Vector embedding generation using Cloudflare AI
-- Chunking for semantic search optimization
-- Space relationship management
-
-### Environment Configuration
-- Uses `wrangler.jsonc` for Cloudflare Workers configuration
-- Supports staging and production environments
-- Requires Cloudflare bindings: Hyperdrive (DB), AI, KV storage, Workflows
-- Cron triggers every 4 hours for connection imports
-
-### Error Handling & Monitoring
-- HTTPException for consistent API error responses
-- Sentry integration with user and organization context
-- Custom logging that filters analytics noise
+1. Install dependencies: `npm install --legacy-peer-deps`
+2. Set up environment variables (copy .env.example files)
+3. Push database schema: `npm run db:push`
+4. Start development: `npm run dev`
+5. Open http://localhost:3001 and navigate to Memory Graph
 
 ## Code Quality & Standards
 
-### Linting & Formatting
-- **Biome** used for linting and formatting across the monorepo
-- Run `bun run format-lint` to format and lint all code
-- Configuration in `biome.json` at repository root
-
 ### TypeScript
-- Strict TypeScript configuration with `@total-typescript/tsconfig`
-- Type checking with `bun run check-types`
-- Cloudflare Workers type generation with `cf-typegen`
+- Strict TypeScript configuration
+- Type checking with `npm run check-types`
+- Shared configs in `packages/config`
 
 ### Database Management
-- Drizzle ORM with schema located in shared packages
-- Database migrations handled through Drizzle Kit
-- Schema types automatically generated and shared
-
-## Security & Best Practices
-
-### Authentication
-- Better Auth handles user authentication and organization management
-- API key authentication for external access
-- Role-based access control within organizations
-
-### Data Handling
-- Content hashing to prevent duplicate processing
-- Secure handling of external service credentials
-- Automatic content type detection and validation
-
-### Deployment
-- Cloudflare Workers for scalable serverless deployment
-- Source map uploads to Sentry for production debugging
-- Environment-specific configuration management
+- Drizzle ORM with SQLite
+- Schema in `packages/db/src/schema.ts`
+- Migrations handled through Drizzle Kit

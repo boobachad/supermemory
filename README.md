@@ -1,105 +1,264 @@
-<p align="center" style="padding-bottom:20px;padding-top:20px">
-  <picture>
-    <source srcset="apps/web/public/logo-fullmark.svg" media="(prefers-color-scheme: dark)">
-    <source srcset="apps/web/public/logo-light-fullmark.svg" media="(prefers-color-scheme: light)">
-    <img src="apps/web/public/logo-fullmark.svg" alt="supermemory Logo" width="400" />
-  </picture>
-  <br/><br/>
-  <em>Your AI second brain for saving and organizing everything that matters.</em>
-  <br/><br/>
-  <a href="https://app.supermemory.ai" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Web-App-000000?style=for-the-badge" alt="Web App" />
-  </a>
-  &nbsp;
-  <a href="https://chromewebstore.google.com/detail/supermemory/afpgkkipfdpeaflnpoaffkcankadgjfc" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Chrome-Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome Extension" />
-  </a>
-  &nbsp;
-  <a href="https://www.raycast.com/supermemory/supermemory" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Raycast-Extension-FF6363?style=for-the-badge&logo=raycast&logoColor=white" alt="Raycast Extension" />
-  </a>
-  &nbsp;
-  <a href="https://supermemory.link/discord" style="text-decoration: none;">
-    <img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" />
-  </a>
-</p>
+# History Learning MVP - Memory Graph Demo
 
-<p style="font-size: 0.9em; color: #666;">
-    <strong>Building with Supermemory?</strong> Check out the <a href="https://console.supermemory.ai?utm_source=github&utm_medium=readme&utm_campaign=consumer_app">Developer Console</a> and <a href="https://docs.supermemory.ai?utm_source=github&utm_medium=readme&utm_campaign=consumer_app">Documentation</a> for API access.
-</p>
-<p style="font-size: 0.9em; color: #666;">
-    <strong>Want to self-host?</strong> See our <a href="https://supermemory.ai/docs/deployment/self-hosting#self-hosting">Self-Hosting Guide</a> for enterprise deployment options.
-</p>
-<br/>
+A standalone MVP demonstrating how to use `@supermemory/memory-graph` to visualize browsing history as a knowledge graph with cross-referencing capabilities.
 
-<div align="center" style="padding-bottom:10px;padding-top:10px">
-  <img src="apps/web/public/landing-page.jpeg" alt="supermemory" width="100%" />
-</div>
+## What This MVP Does
 
-## Features
+This project simulates a history learning application that:
 
-### Core Functionality
+1. **Fetches & Filters History**: Loads mock browsing history data and filters out irrelevant entries (like social media, email, etc.), keeping only programming-related content.
 
-- **[Add Memories from Any Content](#add-memory)**: Easily add memories from URLs, PDFs, and plain text—just paste, upload, or link.
-- **[Chat with Your Memories](#chat-memories)**: Converse with your stored content using natural language chat.
-- **[Supermemory MCP Integration](#mcp-integration)**: Seamlessly connect with all major AI tools (Claude, Cursor, etc.) via Supermemory MCP.
-- **[Browser Extension](#browser-extension)**: Save memories directly from your browser with integrations for ChatGPT, Claude, and Twitter/X.
-- **[Raycast Extension](#raycast-extension)**: Add and search memories directly from Raycast with keyboard shortcuts.
+2. **Cross-References Entries**: Analyzes filtered entries and creates parent "topic" nodes that group related items. For example:
+   - `<div>`, `<span>`, `<table>` entries → grouped under HTML element categories
+   - CSS flexbox, grid entries → grouped under "CSS Styling" parent
+   - JavaScript function, async/await entries → grouped under "JavaScript" parent
 
-## How do I use this?
+3. **Visualizes as Knowledge Graph**: Uses `@supermemory/memory-graph` to display the data as an interactive graph where you can:
+   - See document nodes and their memory connections
+   - View parent-child relationships after cross-referencing
+   - Pan, zoom, and interact with the graph
 
-Go to [app.supermemory.ai](https://app.supermemory.ai) and sign in with your account
+---
 
-1. <a id="add-memory"></a>Start Adding Memory with your choice of format (Note, Link, File)
-<div align="center" style="padding-bottom:10px;padding-top:10px">
-  <img src="apps/web/public/add-memory.png" alt="supermemory" width="100%" />
-</div>
+## Local Setup Instructions
 
-2. You can also Connect to your favourite services (Notion, Google Drive, OneDrive)
-<div align="center" style="padding-bottom:10px;padding-top:10px">
-  <img src="apps/web/public/add-connections.png" alt="supermemory" width="100%" />
-</div>
+### Prerequisites
 
-3. <a id="chat-memories"></a>Once Memories are added, you can chat with Supermemory by clicking on "Open Chat" and retrieve info from your saved memories
-<div align="center" style="padding-bottom:10px;padding-top:10px">
-  <img src="apps/web/public/chat.png" alt="supermemory" width="100%" />
-</div>
+You must have the following installed:
 
-4. <a id="mcp-integration"></a>Add MCP to your AI Tools (by clicking on "Connect to your AI" and select the AI tool you are trying to integrate)
-<div align="center" style="padding-bottom:10px;padding-top:10px">
-  <img src="apps/web/public/mcp.png" alt="supermemory" width="100%" />
-</div>
+- **Node.js** version 18 or higher. Check with: `node --version`
+- **npm** version 10 or higher. Check with: `npm --version`
 
-5. <a id="browser-extension"></a>**Browser Extension**: Install the [Chrome/Edge extension](https://chromewebstore.google.com/detail/supermemory/afpgkkipfdpeaflnpoaffkcankadgjfc) to save memories directly from any webpage, integrate with ChatGPT and Claude conversations, and import from Twitter/X. Right-click on any content or use the extension popup to save memories instantly.
+### Step 1: Clone the Repository
 
-6. <a id="raycast-extension"></a>**Raycast Extension**: Install the [Raycast extension](https://www.raycast.com/supermemory/supermemory) to add and search memories directly from Raycast. Use the "Add Memory" command to quickly save content, or "Search Memories" to find and retrieve your saved information with keyboard shortcuts.
+Open your terminal and run:
 
-## Support
+```bash
+git clone https://github.com/supermemoryai/supermemory.git
+```
 
-Have questions or feedback? We're here to help:
+Then navigate into the project:
 
-- Email: [support@supermemory.com](mailto:support@supermemory.com)
-- Discord: [Join our Discord server](https://supermemory.link/discord)
-- Documentation: [docs.supermemory.ai](https://docs.supermemory.ai)
+```bash
+cd supermemory
+```
 
-## Contributing
+### Step 2: Install Dependencies
 
-We welcome contributions from developers of all skill levels! Whether you're fixing bugs, adding features, or improving documentation, your help makes supermemory better for everyone.
+Run this exact command:
 
-For detailed guidelines, development setup, coding standards, and the complete contribution workflow, please see our [**Contributing Guide**](CONTRIBUTING.md).
+```bash
+npm install --legacy-peer-deps
+```
 
-### Ways to Contribute
+Wait for it to complete. You should see output ending with something like "added XXX packages".
 
-- 🐛 **Bug fixes** - Help us squash those pesky issues
-- ✨ **New features** - Add functionality that users will love
-- 🎨 **UI/UX improvements** - Make the interface more intuitive
-- ⚡ **Performance optimizations** - Help us make supermemory faster
+### Step 3: Create Environment Files
 
-Check out our [Issues](https://github.com/supermemoryai/supermemory/issues) page for `good first issue` and `help wanted` labels to get started!
+**Create the web app environment file:**
 
-## Updates & Roadmap
+```bash
+cp apps/web/.env.example apps/web/.env
+```
 
-Stay up to date with the latest improvements:
+**Create the server environment file:**
 
-- [Changelog](https://docs.supermemory.ai/changelog/overview)
-- [X](https://x.com/supermemoryai).
+```bash
+cp apps/server/.env.example apps/server/.env
+```
+
+**Edit the server environment file** to add a secret key. Open `apps/server/.env` in a text editor and change the first line:
+
+Before:
+```
+BETTER_AUTH_SECRET=your-secret-key-here
+```
+
+After (use any random string at least 32 characters):
+```
+BETTER_AUTH_SECRET=my-super-secret-key-that-is-at-least-32-chars
+```
+
+Or generate a random secret with this command and paste the output:
+```bash
+openssl rand -base64 32
+```
+
+The final `apps/server/.env` file should look like this:
+```
+BETTER_AUTH_SECRET=my-super-secret-key-that-is-at-least-32-chars
+BETTER_AUTH_URL=http://localhost:3000
+CORS_ORIGIN=http://localhost:3001
+DATABASE_URL=file:./local.db
+```
+
+### Step 4: Set Up the Database
+
+Run this exact command from the root of the project:
+
+```bash
+npm run db:push
+```
+
+You should see output including "Changes applied" at the end.
+
+### Step 5: Start the Development Servers
+
+Run this command from the root of the project:
+
+```bash
+npm run dev
+```
+
+Wait about 10 seconds. You should see output from both the server and web app.
+
+**If the above command does not work**, start the servers separately:
+
+Open **Terminal 1** and run:
+```bash
+cd apps/server
+npm run dev
+```
+You should see: `Server is running on port 3000`
+
+Open **Terminal 2** and run:
+```bash
+cd apps/web
+npm run dev
+```
+You should see: `VITE ready` and `Local: http://localhost:3001/`
+
+### Step 6: Open the Application
+
+Open your web browser (Chrome, Firefox, Edge, Safari) and go to this URL:
+
+```
+http://localhost:3001
+```
+
+You should see a page with "BETTER T STACK" ASCII art and "API Status: Connected" (green dot).
+
+If you see "API Status: Checking..." that stays forever, the server is not running. Go back to Step 5.
+
+### Step 7: Use the Memory Graph Demo
+
+1. Click **"Memory Graph"** in the top navigation bar
+2. Click the **"Start Demo"** button in the center of the page
+3. The graph will load and show filtered history entries (19 documents from 22 total)
+4. Click **"2. Cross-Reference"** button at the top
+5. The graph now shows 26 documents with 45 connections organized into 7 topic categories
+
+---
+
+## Troubleshooting
+
+### Problem: "npm install" fails
+
+**Solution:**
+1. Make sure you're using Node.js 18 or higher: `node --version`
+2. Delete the node_modules folder: `rm -rf node_modules`
+3. Delete package-lock.json: `rm package-lock.json`
+4. Run install again: `npm install --legacy-peer-deps`
+
+### Problem: "npm run db:push" fails
+
+**Solution:**
+1. Make sure the file `apps/server/.env` exists
+2. Make sure it contains the line: `DATABASE_URL=file:./local.db`
+3. Make sure you are running the command from the root folder (not from apps/server)
+
+### Problem: Server won't start / "BETTER_AUTH_SECRET" error
+
+**Solution:**
+1. Open `apps/server/.env` in a text editor
+2. Make sure `BETTER_AUTH_SECRET` is set to a string at least 32 characters long
+3. Example: `BETTER_AUTH_SECRET=this-is-my-secret-key-for-testing-1234567890`
+
+### Problem: Web app shows "API Status: Checking..." forever
+
+**Solution:**
+1. Make sure the server is running (you should see "Server is running on port 3000" in terminal)
+2. Open `apps/web/.env` and make sure it contains: `VITE_SERVER_URL=http://localhost:3000`
+3. Restart both the server and web app
+
+### Problem: "Port 3000 already in use" or "Port 3001 already in use"
+
+**Solution:** Find and stop the process using that port.
+
+On Mac/Linux:
+```bash
+# Find process on port 3000
+lsof -i :3000
+# Note the PID number, then kill it
+kill -9 <PID>
+```
+
+On Windows:
+```bash
+# Find process on port 3000
+netstat -ano | findstr :3000
+# Note the PID number, then kill it
+taskkill /PID <PID> /F
+```
+
+---
+
+## Available Commands
+
+Run these commands from the root folder of the project.
+
+| Command | What it does |
+|---------|--------------|
+| `npm run dev` | Starts both web app (port 3001) and server (port 3000) |
+| `npm run build` | Builds both web app and server for production |
+| `npm run dev:web` | Starts only the web app on port 3001 |
+| `npm run dev:server` | Starts only the server on port 3000 |
+| `npm run db:push` | Creates/updates database tables from schema |
+| `npm run db:studio` | Opens database viewer in your browser |
+| `npm run check-types` | Checks TypeScript types for errors |
+
+---
+
+## Project Structure
+
+```
+supermemory/
+├── apps/
+│   ├── web/                    # Frontend (React + Vite)
+│   │   ├── src/
+│   │   │   ├── routes/         # Pages
+│   │   │   │   └── graph.tsx   # Memory Graph page (main demo)
+│   │   │   └── lib/
+│   │   │       └── history/    # History processing logic
+│   │   ├── .env.example        # Template for web config
+│   │   └── .env                # Your web config (create this)
+│   └── server/                 # Backend (Hono + tRPC)
+│       ├── src/
+│       │   └── index.ts        # Server entry point
+│       ├── .env.example        # Template for server config
+│       └── .env                # Your server config (create this)
+├── packages/
+│   ├── api/                    # Shared API definitions
+│   ├── auth/                   # Authentication config
+│   ├── config/                 # TypeScript configs
+│   └── db/                     # Database schema
+├── package.json                # Root dependencies and scripts
+├── turbo.json                  # Build configuration
+└── README.md                   # This file
+```
+
+---
+
+## Key Files for the Demo
+
+| File | What it contains |
+|------|------------------|
+| `apps/web/src/lib/history/mock-data.ts` | The fake browsing history data (22 entries) |
+| `apps/web/src/lib/history/processing.ts` | Logic to filter entries and create topic categories |
+| `apps/web/src/routes/graph.tsx` | The Memory Graph page with all the UI and demo logic |
+
+---
+
+## License
+
+MIT
